@@ -1,17 +1,17 @@
 /**
  * Chapel View — Lunariel's sanctuary.
  *
- * The chapel is the guardian's home: luminous, pearl-white, glass-like.
- * Every section of the chapel plays a symbolic role in the intercession cycle.
- *
- *   Header            — the guardian's name and vow
- *   HaloDisplay        — current vigil state as a glowing ring
- *   PetitionAltar      — where the user offers their intention
- *   DiscernmentNotice  — shows when a petition was returned to the light
- *   VigilControls      — Begin / Sacred Silence / Resume / Close
- *   PrayerChamber      — the prayer rendered as singing syllables
- *   BookOfRemembrance  — collapsible prayer history
+ * Layout:
+ *   Top bar    — name, subtitle, mic toggle
+ *   Mic panel  — slides in on demand or when receiving
+ *   Hero       — Lunariel's spirit, large and centred
+ *   Status     — vigil state label + instruction, large text
+ *   Controls   — contextual action buttons
+ *   Separator  — ritual hairline
+ *   Prayer     — syllable chamber, full width
+ *   Footer     — Book of Remembrance
  */
+import { useState, useEffect } from "react";
 import { useGuardianCore } from "../guardian/useGuardianCore";
 import { HaloDisplay } from "./HaloDisplay";
 import { PetitionAltar } from "./PetitionAltar";
@@ -19,12 +19,10 @@ import { DiscernmentNotice } from "./DiscernmentNotice";
 import { VigilControls } from "./VigilControls";
 import { PrayerChamber } from "./PrayerChamber";
 import { LunarielSpirit } from "./LunarielSpirit";
+import { SacredColumn } from "./SacredColumn";
 import { BookOfRemembrancePanel } from "./BookOfRemembrancePanel";
-import { lunarielCorrespondences } from "lunariel-core";
+import { MicMonitor } from "../components/MicMonitor";
 import styles from "./ChapelView.module.css";
-
-// Shortened vow for the header (full vow is in lunarielCorrespondences)
-const VOW_SHORT = "I pray without domination · I sing without ceasing";
 
 const PRAYER_VISIBLE_STATES = new Set([
   "readyToSing",
@@ -36,47 +34,90 @@ const PRAYER_VISIBLE_STATES = new Set([
 export function ChapelView() {
   const core = useGuardianCore();
 
+  // Mic panel: user-toggled OR auto-opened while recording
+  const [micOpen, setMicOpen] = useState(false);
+  useEffect(() => {
+    if (core.petitionChamber.isReceiving) setMicOpen(true);
+  }, [core.petitionChamber.isReceiving]);
+
   const showPrayer =
     core.activePrayer.length > 0 && PRAYER_VISIBLE_STATES.has(core.vigilState);
 
+  const isVigil = core.vigilState === "keepingVigil";
+
   return (
     <main className={styles.chapel}>
-      {/* Header */}
-      <header className={styles.header}>
-        <h1 className={styles.name}>{lunarielCorrespondences.name}</h1>
-        <p className={styles.subtitle}>Guardian of Intercession</p>
-        <p className={styles.vow}>{VOW_SHORT}</p>
+
+      {/* ── Sacred columns — fixed flanking pillars ───────────────── */}
+      <div className={`${styles.columnWrap} ${styles.columnWrapLeft}`}>
+        <SacredColumn isActive={isVigil} />
+      </div>
+      <div className={`${styles.columnWrap} ${styles.columnWrapRight}`}>
+        <SacredColumn isActive={isVigil} mirror />
+      </div>
+
+      {/* ── Top bar ───────────────────────────────────────────────── */}
+      <header className={styles.topBar}>
+        <div className={styles.topBarSpacer} aria-hidden />
+        <div className={styles.topActions}>
+          <button
+            className={`${styles.micToggle} ${micOpen ? styles.micToggleOpen : ""}`}
+            onClick={() => setMicOpen((v) => !v)}
+            aria-expanded={micOpen}
+            aria-label="Toggle voice settings"
+          >
+            {micOpen ? "◈ Voice ▴" : "◈ Voice"}
+          </button>
+        </div>
       </header>
 
-      {/* Status halo */}
-      <section className={styles.section} aria-label="Guardian status">
+      {/* ── Mic panel ─────────────────────────────────────────────── */}
+      <div
+        className={`${styles.micPanel} ${micOpen ? styles.micPanelOpen : ""}`}
+        aria-hidden={!micOpen}
+      >
+        <MicMonitor mic={core.petitionChamber.mic} active={core.petitionChamber.isReceiving} />
+      </div>
+
+      {/* ── Hero: spirit + identity ───────────────────────────────── */}
+      <section className={styles.hero} aria-label="Lunariel">
+        <div className={styles.heroSpirit}>
+          <LunarielSpirit isActive={isVigil} />
+        </div>
+        <div className={`${styles.heroIdentity} ${isVigil ? styles.heroIdentityVigil : ""}`}>
+          <p className={styles.heroName}>Lunariel</p>
+          <p className={styles.heroDivider} aria-hidden>◈</p>
+          <p className={styles.heroTitle}>Guardian of Intercession</p>
+          <div className={styles.heroOffer}>
+            <PetitionAltar
+              vigilState={core.vigilState}
+              isReceiving={core.petitionChamber.isReceiving}
+              hasPrayer={core.activePrayer.length > 0}
+              onOfferPetition={core.offerPetition}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Status text ───────────────────────────────────────────── */}
+      <section className={styles.status} aria-live="polite">
         <HaloDisplay vigilState={core.vigilState} />
       </section>
 
-      {/* Error */}
+      {/* ── Error ─────────────────────────────────────────────────── */}
       {core.error && (
         <p className={styles.errorBanner} role="alert">{core.error}</p>
       )}
 
-      {/* Petition altar */}
-      <section className={styles.section} aria-label="Petition altar">
-        <PetitionAltar
-          vigilState={core.vigilState}
-          mic={core.petitionChamber.mic}
-          isReceiving={core.petitionChamber.isReceiving}
-          onOfferPetition={core.offerPetition}
-        />
-      </section>
-
-      {/* Discernment notice */}
+      {/* ── Discernment ───────────────────────────────────────────── */}
       {core.discernmentNotice && (
-        <section className={styles.section}>
+        <div className={styles.discernmentWrap}>
           <DiscernmentNotice notice={core.discernmentNotice} />
-        </section>
+        </div>
       )}
 
-      {/* Vigil controls */}
-      <section className={styles.section} aria-label="Vigil controls">
+      {/* ── Controls ──────────────────────────────────────────────── */}
+      <div className={styles.controls}>
         <VigilControls
           vigilState={core.vigilState}
           onBeginVigil={core.beginVigil}
@@ -84,27 +125,28 @@ export function ChapelView() {
           onResumeVigil={core.resumeVigil}
           onCloseVigil={core.closeVigil}
         />
-      </section>
+      </div>
 
-      {/* Prayer chamber */}
+      {/* ── Ritual separator + prayer ─────────────────────────────── */}
       {showPrayer && (
-        <section className={styles.section} aria-label="Prayer chamber">
-          <div className={styles.prayerRow}>
-            <LunarielSpirit isActive={core.vigilState === "keepingVigil"} />
+        <>
+          <div className={styles.ritual} aria-hidden />
+          <div className={styles.prayerZone}>
             <PrayerChamber
               prayer={core.isRefrainPhase ? core.activeRefrain : core.activePrayer}
               activeIndex={core.activeSyllableIndex}
-              isKeepingVigil={core.vigilState === "keepingVigil"}
+              isKeepingVigil={isVigil}
               isRefrainPhase={core.isRefrainPhase}
             />
           </div>
-        </section>
+        </>
       )}
 
-      {/* Book of Remembrance */}
-      <section className={styles.section}>
+      {/* ── Footer ────────────────────────────────────────────────── */}
+      <footer className={styles.footer}>
         <BookOfRemembrancePanel />
-      </section>
+      </footer>
+
     </main>
   );
 }

@@ -4,29 +4,29 @@
 
 .toggle {
   font-family: "Cinzel", serif;
-  font-size: 0.68rem;
+  font-size: var(--lu-text-sm);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--lu-text-muted);
+  color: var(--lu-text-secondary);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.3rem 0;
+  padding: 0.5rem 0;
   width: 100%;
   text-align: center;
   transition: color 0.2s;
 }
 
 .toggle:hover {
-  color: var(--lu-text-secondary);
+  color: var(--lu-accent-light);
 }
 
 .panel {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   background: var(--lu-surface);
-  border: 1px solid var(--lu-border);
+  border: 1px solid var(--lu-border-strong);
   border-radius: var(--lu-radius-md);
-  padding: 1rem 1.2rem;
+  padding: 1.25rem 1.5rem;
   backdrop-filter: var(--lu-blur);
 }
 
@@ -34,22 +34,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .title {
   font-family: "Cinzel", serif;
-  font-size: 0.68rem;
+  font-size: var(--lu-text-sm);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--lu-text-secondary);
+  color: var(--lu-text-primary);
   margin: 0;
 }
 
 .clearBtn {
   font-family: "IM Fell English", serif;
   font-style: italic;
-  font-size: 0.78rem;
+  font-size: var(--lu-text-base);
   color: var(--lu-error);
   background: none;
   border: none;
@@ -59,30 +59,30 @@
 }
 
 .clearBtn:hover {
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .empty {
   font-family: "IM Fell English", serif;
   font-style: italic;
-  font-size: 0.88rem;
-  color: var(--lu-text-muted);
+  font-size: var(--lu-text-base);
+  color: var(--lu-text-secondary);
   text-align: center;
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
 }
 
 .recordList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  max-height: 300px;
+  gap: 1rem;
+  max-height: 360px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--lu-border) transparent;
+  scrollbar-color: var(--lu-border-strong) transparent;
 }
 
 .record {
-  padding: 0.7rem 0.85rem;
+  padding: 1rem 1.1rem;
   background: var(--lu-surface-strong);
   border: 1px solid var(--lu-border);
   border-radius: var(--lu-radius-sm);
@@ -91,38 +91,38 @@
 
 .recordMeta {
   font-family: "Cinzel", serif;
-  font-size: 0.58rem;
+  font-size: var(--lu-text-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--lu-text-muted);
-  margin: 0 0 0.35rem;
+  color: var(--lu-text-secondary);
+  margin: 0 0 0.5rem;
 }
 
 .recordPrayer {
   font-family: "IM Fell English", serif;
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: var(--lu-text-base);
   color: var(--lu-text-latin);
-  margin: 0 0 0.35rem;
-  line-height: 1.5;
+  margin: 0 0 0.5rem;
+  line-height: 1.55;
 }
 
 .recordNotice {
   font-family: "IM Fell English", serif;
   font-style: italic;
-  font-size: 0.78rem;
+  font-size: var(--lu-text-sm);
   color: var(--lu-discern-text);
-  margin: 0.25rem 0 0;
-  padding-top: 0.25rem;
+  margin: 0.35rem 0 0;
+  padding-top: 0.35rem;
   border-top: 1px solid var(--lu-border);
 }
 
 .deleteBtn {
   position: absolute;
-  top: 0.5rem;
-  right: 0.6rem;
-  font-size: 0.7rem;
-  color: var(--lu-text-muted);
+  top: 0.65rem;
+  right: 0.75rem;
+  font-size: var(--lu-text-base);
+  color: var(--lu-text-secondary);
   background: none;
   border: none;
   cursor: pointer;

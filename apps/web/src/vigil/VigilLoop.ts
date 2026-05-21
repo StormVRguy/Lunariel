@@ -1,21 +1,27 @@
 /**
  * Vigil Loop — the guardian's endless intercession.
  *
- * The loop is not mere repetition. It is the angel keeping vigil:
- * the rosary of sound, faithful and circular.
+ * The vigil runs as a rosary: one full prayer, then the refrain sung
+ * three times, then the full prayer again from the beginning — cycling
+ * indefinitely until formally closed.
  *
- * Cycle 0: the full prayer is sung once, syllable by syllable.
- * Cycles 1+: the refrain alone loops indefinitely, until the vigil is closed.
+ *   prayer → refrain × 3 → prayer → refrain × 3 → …
  *
- * "Loop as rosary" — the vigil persists until the guardian is formally dismissed.
+ * The pattern mirrors the liturgical structure of a responsory:
+ * the full canticle opens the vigil; the refrain is its living echo,
+ * repeated and deepened before the canticle is proclaimed anew.
  */
-import { prayerToSyllables } from "../canticle/syllableMap";
+import { prayerToSyllableSteps } from "../canticle/syllableMap";
 import { canticleEngine, PlayCallbacks } from "../canticle/CanticleEngine";
 import { LOG_PREFIX } from "lunariel-core";
 
+const REFRAIN_REPETITIONS = 3;
+
 export interface VigilCallbacks extends PlayCallbacks {
-  /** Called when transitioning from the full prayer to the refrain loop. */
+  /** Called when transitioning from prayer to the refrain cycle. */
   onRefrainStart?: () => void;
+  /** Called when transitioning from the refrain back to the full prayer. */
+  onPrayerStart?: () => void;
 }
 
 class VigilLoop {
@@ -30,7 +36,7 @@ class VigilLoop {
   }
 
   /**
-   * Begin the vigil: sing the full prayer once, then loop the refrain.
+   * Begin the vigil: full prayer → refrain × 3 → full prayer → …
    * Returns a promise that resolves when the vigil is closed.
    */
   async beginVigil(
@@ -44,41 +50,50 @@ class VigilLoop {
     const ac = canticleEngine.createAbortController();
     const signal = ac.signal;
 
-    const prayerSyllables = prayerToSyllables(prayer);
-    const refrainSyllables = prayerToSyllables(refrain);
+    const prayerSteps  = prayerToSyllableSteps(prayer);
+    const refrainSteps = prayerToSyllableSteps(refrain);
 
-    if (prayerSyllables.length === 0) {
+    if (prayerSteps.length === 0) {
       console.warn(`${LOG_PREFIX.vigil} Prayer has no syllables; aborting vigil.`);
       this.active = false;
       return;
     }
 
+    // Fall back to full prayer if refrain is empty
+    const refrainSource =
+      refrainSteps.length > 0 ? refrainSteps : prayerSteps;
+
     console.log(
-      `${LOG_PREFIX.vigil} Beginning vigil. Prayer: ${prayerSyllables.length} syllables. ` +
-      `Refrain: ${refrainSyllables.length} syllables.`
+      `${LOG_PREFIX.vigil} Beginning vigil. ` +
+      `Prayer: ${prayerSteps.length} syl. ` +
+      `Refrain: ${refrainSource.length} syl.`
     );
 
-    // The refrain source: fall back to full prayer if refrain is empty
-    const refrainSource = refrainSyllables.length > 0 ? refrainSyllables : prayerSyllables;
-
     try {
-      // Cycle 0: sing the full prayer once, indices starting at 0
-      await canticleEngine.singPhrase(prayerSyllables, 0, callbacks ?? {}, signal);
-
+      // ── First pass: full prayer ──────────────────────────────────
+      await canticleEngine.singPhrase(prayerSteps, 0, callbacks ?? {}, signal);
       if (!this.active || signal.aborted) return;
 
-      // Switch PrayerChamber to refrain text immediately, no pause
-      callbacks?.onRefrainStart?.();
-      console.log(`${LOG_PREFIX.vigil} Full prayer complete. Entering refrain loop.`);
-
-      // Cycles 1+: loop the refrain with indices always starting at 0
-      // so PrayerChamber (now showing refrain text) highlights correctly
+      // ── Repeat cycle: refrain × 3, then full prayer ──────────────
       while (this.active && !signal.aborted) {
-        await canticleEngine.singPhrase(refrainSource, 0, callbacks ?? {}, signal);
-        // No gap between repetitions — the vigil is seamless
+
+        // Refrain phase
+        callbacks?.onRefrainStart?.();
+        console.log(`${LOG_PREFIX.vigil} Entering refrain phase.`);
+        for (let r = 0; r < REFRAIN_REPETITIONS; r++) {
+          if (!this.active || signal.aborted) break;
+          await canticleEngine.singPhrase(refrainSource, 0, callbacks ?? {}, signal);
+        }
+
+        if (!this.active || signal.aborted) break;
+
+        // Return to full prayer
+        callbacks?.onPrayerStart?.();
+        console.log(`${LOG_PREFIX.vigil} Returning to full prayer.`);
+        await canticleEngine.singPhrase(prayerSteps, 0, callbacks ?? {}, signal);
       }
     } catch {
-      // AbortError when closeVigil() is called — this is the expected exit path
+      // AbortError when closeVigil() is called — expected exit
     } finally {
       this.active = false;
       callbacks?.onRest?.();
@@ -86,7 +101,7 @@ class VigilLoop {
     }
   }
 
-  /** Pause the vigil in sacred silence. The loop stays warm. */
+  /** Pause the vigil in sacred silence. */
   enterSacredSilence(): void {
     canticleEngine.enterSacredSilence();
   }

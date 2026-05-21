@@ -1,18 +1,16 @@
 /**
- * Petition Altar — the user's point of contact with the guardian.
+ * Petition Altar — the single point of contact between user and guardian.
  *
- * Here the user offers their intention. The microphone is open,
- * the voice is received, and the prayer is begun.
+ * Just the offer button. The microphone panel lives in the top bar.
+ * The button changes label and pulse state while receiving the petition.
  */
 import type { VigilState } from "lunariel-core";
-import { MicMonitor } from "../components/MicMonitor";
-import type { UseMicMonitor } from "../hooks/useMicMonitor";
 import styles from "./PetitionAltar.module.css";
 
 interface Props {
   vigilState: VigilState;
-  mic: UseMicMonitor;
   isReceiving: boolean;
+  hasPrayer: boolean;
   onOfferPetition: () => void;
 }
 
@@ -24,28 +22,24 @@ const OFFER_BTN_STATES: VigilState[] = [
   "interrupted",
 ];
 
-export function PetitionAltar({ vigilState, mic, isReceiving, onOfferPetition }: Props) {
+export function PetitionAltar({ vigilState, isReceiving, hasPrayer, onOfferPetition }: Props) {
   const canOffer = OFFER_BTN_STATES.includes(vigilState);
+  if (!canOffer) return null;
 
   const btnLabel = isReceiving
     ? "Receiving\u2026 Offer Again to Finish"
-    : "Offer Petition";
+    : hasPrayer
+      ? "New Offering"
+      : "Offer Petition";
 
   return (
-    <div className={styles.wrapper}>
-      <p className={styles.altarLabel}>Petition Altar</p>
-
-      <MicMonitor mic={mic} active={isReceiving} />
-
-      <button
-        className={`${styles.offerBtn} ${isReceiving ? styles.offerBtnReceiving : ""}`}
-        onClick={onOfferPetition}
-        disabled={!canOffer}
-        aria-pressed={isReceiving}
-        aria-label={btnLabel}
-      >
-        {btnLabel}
-      </button>
-    </div>
+    <button
+      className={`${styles.btn} ${isReceiving ? styles.btnReceiving : ""}`}
+      onClick={onOfferPetition}
+      disabled={!canOffer}
+      aria-pressed={isReceiving}
+    >
+      {btnLabel}
+    </button>
   );
 }

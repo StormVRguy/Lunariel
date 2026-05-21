@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 18px;
+}
+
 html,
 body {
   margin: 0;
@@ -15,6 +19,8 @@ body {
   background: var(--lu-bg);
   color: var(--lu-text-primary);
   font-family: "IM Fell English", Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

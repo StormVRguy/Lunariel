@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { VigilState, IntercessionResult } from "lunariel-core";
 import { ERROR_MESSAGES, LOG_PREFIX } from "lunariel-core";
 import { usePetitionChamber, PetitionChamberState } from "../petition/usePetitionChamber";
+import { primeAudio } from "../canticle/primeAudio";
 import { vigilLoop } from "../vigil/VigilLoop";
 import { inscribePrayerRecord } from "../remembrance/BookOfRemembrance";
 import { blobToBase64 } from "../hooks/useAudioRecorder";
@@ -137,17 +138,19 @@ export function useGuardianCore(): GuardianCoreState {
     setActiveSyllableIndex(null);
     setIsRefrainPhase(false);
 
+    void primeAudio().then(() =>
     vigilLoop
       .beginVigil(activePrayer, activeRefrain, {
         onSyllable: (index) => setActiveSyllableIndex(index),
         onRest: () => setActiveSyllableIndex(null),
         onRefrainStart: () => setIsRefrainPhase(true),
+        onPrayerStart: () => setIsRefrainPhase(false),
       })
       .catch((err) => {
         console.error(`${LOG_PREFIX.guardianCore} Vigil error:`, err);
         setError(ERROR_MESSAGES.loopFailure);
         setVigilState("interrupted");
-      });
+      }));
   }, [activePrayer, activeRefrain, setVigilState]);
 
   const enterSacredSilence = useCallback(() => {

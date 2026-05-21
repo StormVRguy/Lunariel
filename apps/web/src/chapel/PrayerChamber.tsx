@@ -8,11 +8,7 @@
  * The prayer text scrolls to keep the active syllable in view.
  */
 import { useEffect, useMemo, useRef } from "react";
-import {
-  prayerToWordSegments,
-  syllableIndexToPosition,
-  letterToNote,
-} from "../canticle/syllableMap";
+import { prayerToWordSegments, getLetterTune } from "../canticle/syllableMap";
 import styles from "./PrayerChamber.module.css";
 
 interface Props {
@@ -24,19 +20,33 @@ interface Props {
 
 export function PrayerChamber({ prayer, activeIndex, isKeepingVigil, isRefrainPhase }: Props) {
   const segments = useMemo(() => prayerToWordSegments(prayer), [prayer]);
+  const flowRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLSpanElement | null>(null);
 
-  const position =
-    activeIndex !== null ? syllableIndexToPosition(segments, activeIndex) : null;
+  const totalSyllables = useMemo(
+    () => segments.reduce((n, w) => n + w.syllables.length, 0),
+    [segments]
+  );
 
+  // Scroll vertically only — never pan horizontally (that caused the flicker).
   useEffect(() => {
-    if (activeRef.current && isKeepingVigil) {
-      activeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
-    }
+    const flow = flowRef.current;
+    const el = activeRef.current;
+    if (!flow || !el || !isKeepingVigil) return;
+
+    const flowRect = flow.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const targetTop =
+      flow.scrollTop +
+      (elRect.top - flowRect.top) -
+      flow.clientHeight / 2 +
+      elRect.height / 2;
+
+    flow.scrollTo({
+      top: Math.max(0, targetTop),
+      left: 0,
+      behavior: "smooth",
+    });
   }, [activeIndex, isKeepingVigil]);
 
   let globalIndex = 0;
@@ -56,7 +66,7 @@ export function PrayerChamber({ prayer, activeIndex, isKeepingVigil, isRefrainPh
         )}
       </p>
 
-      <div className={styles.flow}>
+      <div className={styles.flow} ref={flowRef}>
         {segments.map((seg, wi) => (
           <span key={`${wi}-${seg.word}`} className={styles.wordGroup}>
             {seg.syllables.map((syl, si) => {
@@ -80,20 +90,21 @@ export function PrayerChamber({ prayer, activeIndex, isKeepingVigil, isRefrainPh
                 >
                   <span className={styles.syllableGlow} aria-hidden />
                   <span className={styles.syllableText}>{syl}</span>
-                  {isActive && (
-                    <span className={styles.letters} aria-hidden>
-                      {letters.map((ch, li) => (
-                        <span
-                          key={`${ch}-${li}`}
-                          className={styles.letter}
-                          style={{ animationDelay: `${li * 55}ms` }}
-                          title={letterToNote(ch)}
-                        >
-                          {ch}
-                        </span>
-                      ))}
-                    </span>
-                  )}
+                  <span
+                    className={`${styles.letters} ${isActive ? "" : styles.lettersHidden}`}
+                    aria-hidden={!isActive}
+                  >
+                    {letters.map((ch, li) => (
+                      <span
+                        key={`${ch}-${li}`}
+                        className={styles.letter}
+                        style={isActive ? { animationDelay: `${li * 55}ms` } : undefined}
+                        title={isActive ? getLetterTune(ch).label : undefined}
+                      >
+                        {ch}
+                      </span>
+                    ))}
+                  </span>
                 </span>
               );
             })}
@@ -104,12 +115,14 @@ export function PrayerChamber({ prayer, activeIndex, isKeepingVigil, isRefrainPh
         ))}
       </div>
 
-      {position && isKeepingVigil && activeIndex !== null && (
-        <p className={styles.meta}>
-          Syllable {activeIndex + 1} of{" "}
-          {segments.reduce((n, w) => n + w.syllables.length, 0)}
-        </p>
-      )}
+      <p
+        className={`${styles.meta} ${isKeepingVigil && activeIndex !== null ? "" : styles.metaHidden}`}
+        aria-hidden={!(isKeepingVigil && activeIndex !== null)}
+      >
+        {activeIndex !== null
+          ? `Syllable ${activeIndex + 1} of ${totalSyllables}`
+          : "\u00a0"}
+      </p>
     </div>
   );
 }

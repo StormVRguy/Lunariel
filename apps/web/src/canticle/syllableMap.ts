@@ -1,37 +1,37 @@
 /**
  * Syllable Map — letter-to-tone correspondences for the canticle engine.
  *
- * Every letter of the Latin alphabet maps to a deterministic musical tone.
- * Words are split into syllables; each syllable becomes a chord.
- * The system sings the guardian's prayer letter by letter, fused into sound.
+ * Every letter has a fixed entry in LETTER_TUNES. Words split into syllables;
+ * each syllable becomes a chord by mixing all its letter-tunes at once.
  */
+import { getLetterTune, letterToNote } from "./letterTunes";
 
-const NOTE_NAMES = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"] as const;
-const BASE_OCTAVE = 3;
+export { letterToNote, getLetterTune, LETTER_TUNES } from "./letterTunes";
+
 const VOWELS = new Set(["a", "e", "i", "o", "u", "y"]);
 
-/** Deterministic tone for a single letter (a–z). */
-export function letterToNote(letter: string): string {
-  const ch = letter.toLowerCase().replace(/[^a-z]/g, "");
-  if (!ch) return `${NOTE_NAMES[0]}${BASE_OCTAVE}`;
-  const code = ch.charCodeAt(0) - 97; // a=0 … z=25
-  const pitchClass = code % 12;
-  const octave = BASE_OCTAVE + Math.floor(code / 12);
-  return `${NOTE_NAMES[pitchClass]}${octave}`;
-}
-
-/** All letter-tones in a syllable, sounded together as a chord. */
+/**
+ * Chord for a syllable: one pitch per letter, in syllable order.
+ * Repeated letters stack the same tune (stronger presence of that sound).
+ */
 export function syllableToChord(syllable: string): string[] {
   const letters = syllable.toLowerCase().replace(/[^a-z]/g, "").split("");
-  if (letters.length === 0) return [`${NOTE_NAMES[0]}${BASE_OCTAVE}`];
+  if (letters.length === 0) return [letterToNote("a")];
   return letters.map(letterToNote);
 }
 
-/** Duration in ms scales with syllable letter count. */
+/** Human-readable chord description for debugging / UI. */
+export function syllableChordLabel(syllable: string): string {
+  const letters = syllable.toLowerCase().replace(/[^a-z]/g, "").split("");
+  if (letters.length === 0) return "—";
+  return letters.map((ch) => getLetterTune(ch).label).join(" + ");
+}
+
+/** Duration scales with letter count — more letters, longer chord bloom. */
 export function syllableDurationMs(syllable: string): number {
   const n = syllable.replace(/[^a-z]/gi, "").length;
   const count = Math.max(n, 1);
-  return 180 + count * 120;
+  return Math.max(520, 400 + count * 110);
 }
 
 /**
@@ -95,6 +95,30 @@ export function prayerToWordSegments(prayer: string): WordSegment[] {
 /** Flatten all syllables from a prayer text into a single sequence. */
 export function prayerToSyllables(prayer: string): string[] {
   return prayerToWordSegments(prayer).flatMap((w) => w.syllables);
+}
+
+/** One sung step; wordGapAfter inserts silence before the next word. */
+export interface SyllableStep {
+  syllable: string;
+  wordGapAfter: boolean;
+}
+
+/** Syllable sequence with word-boundary markers for the canticle engine. */
+export function prayerToSyllableSteps(prayer: string): SyllableStep[] {
+  const segments = prayerToWordSegments(prayer);
+  const steps: SyllableStep[] = [];
+
+  for (let wi = 0; wi < segments.length; wi++) {
+    const { syllables } = segments[wi];
+    for (let si = 0; si < syllables.length; si++) {
+      steps.push({
+        syllable: syllables[si],
+        wordGapAfter: si === syllables.length - 1 && wi < segments.length - 1,
+      });
+    }
+  }
+
+  return steps;
 }
 
 /** Map a global syllable index → { wordIndex, syllableIndex within word }. */

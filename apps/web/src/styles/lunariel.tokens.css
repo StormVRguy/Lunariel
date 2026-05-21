@@ -1,64 +1,62 @@
 /**
  * Lunariel design tokens — eigengrau, luminous blue-white glass.
- *
- * Eigengrau (#16161d) is the colour the visual field produces in total darkness.
- * Against it, Lunariel's light-lines and pearl panels appear as visions —
- * luminous, calm, slightly unearthly.
- *
- * Primary correspondences:
- *   Colour: Pearl white (luminous against dark)
- *   Material: Glass (translucent dark panels)
- *   Motif: Circle (halo, rings, buttons)
- *   Time: Dawn (the first light in eigengrau)
  */
 
 :root {
   /* ── Background ───────────────────────────────────── */
-  --lu-bg:             #16161d;   /* eigengrau */
+  --lu-bg:             #16161d;
 
-  /* ── Dark glass surfaces ──────────────────────────── */
-  --lu-surface:        rgba(26, 26, 36, 0.72);
-  --lu-surface-strong: rgba(30, 30, 44, 0.90);
-  --lu-border:         rgba(100, 112, 160, 0.22);
-  --lu-border-strong:  rgba(120, 132, 180, 0.40);
+  /* ── Surfaces (lighter, more visible panels) ──────── */
+  --lu-surface:        rgba(38, 40, 58, 0.88);
+  --lu-surface-strong: rgba(48, 52, 78, 0.95);
+  --lu-border:         rgba(140, 155, 210, 0.45);
+  --lu-border-strong:  rgba(170, 188, 245, 0.72);
 
-  /* ── Luminous typography ──────────────────────────── */
-  --lu-text-primary:   #e4e2f2;
-  --lu-text-secondary: #8888b0;
-  --lu-text-muted:     #50507a;
-  --lu-text-latin:     #ccc8e8;   /* soft blue-white for prayer text */
+  /* ── Typography (high contrast on eigengrau) ──────── */
+  --lu-text-primary:   #f6f4ff;
+  --lu-text-secondary: #c8c8e8;
+  --lu-text-muted:     #9ca0c8;
+  --lu-text-latin:     #eeeaff;
 
-  /* ── Lunar accent (blue) ──────────────────────────── */
-  --lu-accent:         #7a90c8;
-  --lu-accent-light:   #a4bae0;
-  --lu-accent-dim:     rgba(122, 144, 200, 0.14);
+  /* ── Lunar accent ─────────────────────────────────── */
+  --lu-accent:         #9eb4e8;
+  --lu-accent-light:   #c8d8ff;
+  --lu-accent-dim:     rgba(158, 180, 232, 0.28);
 
   /* ── Halo glow ────────────────────────────────────── */
-  --lu-halo:           rgba(160, 180, 240, 0.25);
-  --lu-halo-strong:    rgba(140, 166, 228, 0.50);
+  --lu-halo:           rgba(180, 200, 255, 0.45);
+  --lu-halo-strong:    rgba(200, 220, 255, 0.75);
 
   /* ── Vigil / singing ──────────────────────────────── */
-  --lu-vigil:          rgba(120, 148, 210, 0.18);
-  --lu-vigil-glow:     0 0 32px rgba(100, 130, 210, 0.32);
+  --lu-vigil:          rgba(140, 168, 230, 0.28);
+  --lu-vigil-glow:     0 0 36px rgba(130, 160, 240, 0.55);
 
   /* ── Discernment ──────────────────────────────────── */
-  --lu-discern:        rgba(120, 90, 160, 0.15);
-  --lu-discern-border: rgba(140, 110, 180, 0.38);
-  --lu-discern-text:   #c8a8ee;
+  --lu-discern:        rgba(140, 110, 190, 0.28);
+  --lu-discern-border: rgba(180, 150, 230, 0.55);
+  --lu-discern-text:   #e0c8ff;
 
   /* ── Error / interrupted ──────────────────────────── */
-  --lu-error:          #d06878;
-  --lu-error-bg:       rgba(180, 60, 80, 0.12);
+  --lu-error:          #f08090;
+  --lu-error-bg:       rgba(200, 80, 100, 0.22);
 
   /* ── Recording ────────────────────────────────────── */
-  --lu-rec:            #e05848;
-  --lu-rec-glow:       rgba(220, 88, 72, 0.35);
+  --lu-rec:            #ff7060;
+  --lu-rec-glow:       rgba(255, 110, 90, 0.5);
 
   /* ── Geometry ─────────────────────────────────────── */
-  --lu-radius-sm:      6px;
-  --lu-radius-md:      12px;
+  --lu-radius-sm:      8px;
+  --lu-radius-md:      14px;
   --lu-radius-lg:      24px;
   --lu-radius-full:    9999px;
+
+  /* ── Type scale ───────────────────────────────────── */
+  --lu-text-xs:   0.8rem;
+  --lu-text-sm:   0.95rem;
+  --lu-text-base: 1.125rem;
+  --lu-text-lg:   1.35rem;
+  --lu-text-xl:   1.65rem;
+  --lu-text-2xl:  2rem;
 
   /* ── Blur / glass ─────────────────────────────────── */
   --lu-blur:           blur(12px);

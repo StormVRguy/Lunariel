@@ -1,66 +1,59 @@
 .wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem 1.5rem;
+  flex-wrap: wrap;
 }
 
 .btn {
   font-family: "Cinzel", serif;
-  font-size: 0.92rem;
+  font-size: var(--lu-text-base);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 0.8rem 1.4rem;
-  border: 1.5px solid var(--lu-border-strong);
+  padding: 1rem 2.5rem;
+  border: 2px solid var(--lu-border-strong);
   border-radius: var(--lu-radius-full);
-  background: var(--lu-surface-strong);
+  background: transparent;
   color: var(--lu-text-primary);
   cursor: pointer;
-  width: 100%;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.25s;
-  backdrop-filter: var(--lu-blur-light);
-}
-
-.btn:not(:disabled):hover {
-  background: rgba(50, 55, 80, 0.88);
-  border-color: var(--lu-accent);
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.25s;
+  min-width: 200px;
 }
 
 .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* Begin Vigil — the most important action */
 .btnBegin {
-  border-color: var(--lu-accent);
-  color: var(--lu-accent);
-  background: var(--lu-accent-dim);
+  border-color: var(--lu-accent-light);
+  color: var(--lu-accent-light);
+  min-width: 240px;
+  font-size: var(--lu-text-lg);
 }
 
 .btnBegin:not(:disabled):hover {
-  background: rgba(122, 144, 184, 0.28);
+  background: var(--lu-accent-dim);
+  box-shadow: var(--lu-vigil-glow);
+}
+
+.btnSilence:not(:disabled):hover {
   border-color: var(--lu-accent-light);
-  box-shadow: 0 0 18px var(--lu-halo);
-}
-
-/* Sacred Silence — pause */
-.btnSilence {
-  border-color: var(--lu-border-strong);
-}
-
-/* Resume Vigil */
-.btnResume {
-  border-color: var(--lu-accent);
-  color: var(--lu-accent);
+  color: var(--lu-accent-light);
   background: var(--lu-accent-dim);
 }
 
-/* Close Vigil */
-.btnClose {
-  border-color: var(--lu-border-strong);
-  color: var(--lu-text-secondary);
+.btnResume {
+  border-color: var(--lu-accent-light);
+  color: var(--lu-accent-light);
+}
+
+.btnResume:not(:disabled):hover {
+  background: var(--lu-accent-dim);
+  box-shadow: var(--lu-vigil-glow);
 }
 
 .btnClose:not(:disabled):hover {
