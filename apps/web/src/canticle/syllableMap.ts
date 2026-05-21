@@ -1,4 +1,10 @@
-// Letter → tone mapping and Latin syllabification for organ playback.
+/**
+ * Syllable Map — letter-to-tone correspondences for the canticle engine.
+ *
+ * Every letter of the Latin alphabet maps to a deterministic musical tone.
+ * Words are split into syllables; each syllable becomes a chord.
+ * The system sings the guardian's prayer letter by letter, fused into sound.
+ */
 
 const NOTE_NAMES = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"] as const;
 const BASE_OCTAVE = 3;
@@ -14,14 +20,14 @@ export function letterToNote(letter: string): string {
   return `${NOTE_NAMES[pitchClass]}${octave}`;
 }
 
-/** All letter-tones in a syllable, played together as a chord. */
+/** All letter-tones in a syllable, sounded together as a chord. */
 export function syllableToChord(syllable: string): string[] {
   const letters = syllable.toLowerCase().replace(/[^a-z]/g, "").split("");
   if (letters.length === 0) return [`${NOTE_NAMES[0]}${BASE_OCTAVE}`];
   return letters.map(letterToNote);
 }
 
-/** Duration in ms scales with syllable length (letter count). */
+/** Duration in ms scales with syllable letter count. */
 export function syllableDurationMs(syllable: string): number {
   const n = syllable.replace(/[^a-z]/gi, "").length;
   const count = Math.max(n, 1);
@@ -30,7 +36,7 @@ export function syllableDurationMs(syllable: string): number {
 
 /**
  * Latin-oriented syllabification: vowel nuclei with leading consonants;
- * diphthongs (two adjacent vowels) stay in one syllable.
+ * adjacent vowels (diphthongs) stay in one syllable.
  */
 export function splitIntoSyllables(word: string): string[] {
   const w = word.toLowerCase().replace(/[^a-z]/g, "");
@@ -45,11 +51,9 @@ export function splitIntoSyllables(word: string): string[] {
     while (i < w.length && !VOWELS.has(w[i])) {
       syllable += w[i++];
     }
-
     while (i < w.length && VOWELS.has(w[i])) {
       syllable += w[i++];
     }
-
     if (i < w.length && !VOWELS.has(w[i])) {
       let consonants = "";
       while (i < w.length && !VOWELS.has(w[i])) {
@@ -70,14 +74,11 @@ export function splitIntoSyllables(word: string): string[] {
 }
 
 export interface WordSegment {
-  /** Original word chunk (no spaces). */
   word: string;
   syllables: string[];
 }
 
-/**
- * Strip spaces, split on punctuation into word-like chunks, syllabify each.
- */
+/** Parse prayer text into word segments, each with its syllables. */
 export function prayerToWordSegments(prayer: string): WordSegment[] {
   const chunks = prayer
     .replace(/\s+/g, "")
@@ -91,11 +92,12 @@ export function prayerToWordSegments(prayer: string): WordSegment[] {
   }));
 }
 
+/** Flatten all syllables from a prayer text into a single sequence. */
 export function prayerToSyllables(prayer: string): string[] {
   return prayerToWordSegments(prayer).flatMap((w) => w.syllables);
 }
 
-/** Map global syllable index → { wordIndex, syllableIndexInWord }. */
+/** Map a global syllable index → { wordIndex, syllableIndex within word }. */
 export function syllableIndexToPosition(
   segments: WordSegment[],
   globalIndex: number

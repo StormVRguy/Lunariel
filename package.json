@@ -1,7 +1,7 @@
 {
   "name": "angel-incubator",
   "private": true,
-  "workspaces": ["apps/web", "apps/api"],
+  "workspaces": ["apps/web", "apps/api", "packages/lunariel-core"],
   "scripts": {
     "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev --workspace=apps/api\" \"npm run dev --workspace=apps/web\"",
     "build": "npm run build --workspace=apps/web"

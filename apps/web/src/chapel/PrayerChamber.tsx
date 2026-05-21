@@ -1,18 +1,28 @@
+/**
+ * Prayer Chamber — the visible body of the prayer being sung.
+ *
+ * Displays the prayer broken into syllable chips.
+ * The active syllable glows and rises; past syllables fade.
+ * When in refrain phase, a badge marks the looping section.
+ *
+ * The prayer text scrolls to keep the active syllable in view.
+ */
 import { useEffect, useMemo, useRef } from "react";
 import {
   prayerToWordSegments,
   syllableIndexToPosition,
   letterToNote,
-} from "../audio/wordToChord";
-import styles from "./SyllableVisualizer.module.css";
+} from "../canticle/syllableMap";
+import styles from "./PrayerChamber.module.css";
 
 interface Props {
   prayer: string;
   activeIndex: number | null;
-  isSinging: boolean;
+  isKeepingVigil: boolean;
+  isRefrainPhase: boolean;
 }
 
-export function SyllableVisualizer({ prayer, activeIndex, isSinging }: Props) {
+export function PrayerChamber({ prayer, activeIndex, isKeepingVigil, isRefrainPhase }: Props) {
   const segments = useMemo(() => prayerToWordSegments(prayer), [prayer]);
   const activeRef = useRef<HTMLSpanElement | null>(null);
 
@@ -20,26 +30,30 @@ export function SyllableVisualizer({ prayer, activeIndex, isSinging }: Props) {
     activeIndex !== null ? syllableIndexToPosition(segments, activeIndex) : null;
 
   useEffect(() => {
-    if (activeRef.current && isSinging) {
+    if (activeRef.current && isKeepingVigil) {
       activeRef.current.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
         inline: "center",
       });
     }
-  }, [activeIndex, isSinging]);
+  }, [activeIndex, isKeepingVigil]);
 
   let globalIndex = 0;
 
   return (
     <div
-      className={`${styles.wrapper} ${isSinging ? styles.wrapperLive : ""}`}
+      className={`${styles.wrapper} ${isKeepingVigil ? styles.wrapperLive : ""}`}
       aria-live="polite"
-      aria-label="Syllables being sung"
+      aria-label="Prayer being sung"
     >
-      <div className={styles.scanline} aria-hidden />
       <p className={styles.caption}>
-        {isSinging && activeIndex !== null ? "♪ Now singing" : "Syllables"}
+        {isKeepingVigil && activeIndex !== null ? "♪ Singing" : "Prayer"}
+        {isRefrainPhase && (
+          <span className={styles.refrainBadge} title="The refrain loops as the vigil">
+            Refrain
+          </span>
+        )}
       </p>
 
       <div className={styles.flow}>
@@ -47,8 +61,8 @@ export function SyllableVisualizer({ prayer, activeIndex, isSinging }: Props) {
           <span key={`${wi}-${seg.word}`} className={styles.wordGroup}>
             {seg.syllables.map((syl, si) => {
               const idx = globalIndex++;
-              const isActive = isSinging && activeIndex === idx;
-              const isPast = isSinging && activeIndex !== null && idx < activeIndex;
+              const isActive = isKeepingVigil && activeIndex === idx;
+              const isPast = isKeepingVigil && activeIndex !== null && idx < activeIndex;
               const letters = syl.split("");
 
               return (
@@ -59,7 +73,7 @@ export function SyllableVisualizer({ prayer, activeIndex, isSinging }: Props) {
                     styles.syllable,
                     isActive ? styles.syllableActive : "",
                     isPast ? styles.syllablePast : "",
-                    !isSinging ? styles.syllableIdle : "",
+                    !isKeepingVigil ? styles.syllableIdle : "",
                   ]
                     .filter(Boolean)
                     .join(" ")}
@@ -84,15 +98,13 @@ export function SyllableVisualizer({ prayer, activeIndex, isSinging }: Props) {
               );
             })}
             {wi < segments.length - 1 && (
-              <span className={styles.wordGap} aria-hidden>
-                ·
-              </span>
+              <span className={styles.wordGap} aria-hidden>·</span>
             )}
           </span>
         ))}
       </div>
 
-      {position && isSinging && activeIndex !== null && (
+      {position && isKeepingVigil && activeIndex !== null && (
         <p className={styles.meta}>
           Syllable {activeIndex + 1} of{" "}
           {segments.reduce((n, w) => n + w.syllables.length, 0)}

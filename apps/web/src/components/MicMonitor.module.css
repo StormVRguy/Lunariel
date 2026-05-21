@@ -2,72 +2,73 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  background: #0c0a08;
-  border: 1px solid #2e2618;
-  border-radius: 6px;
-  padding: 0.9rem 1.1rem;
+  gap: 0.6rem;
 }
 
-/* ── Device selector row ─────────────────────────────── */
+/* ── Device selector row ──────────────────────── */
 
 .row {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.6rem;
 }
 
 .label {
   font-family: "Cinzel", serif;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #6a5840;
+  color: var(--lu-text-muted);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .select {
   flex: 1;
-  background: #14100c;
-  color: #c8b090;
-  border: 1px solid #3a3020;
-  border-radius: 3px;
-  padding: 0.35rem 0.5rem;
+  background: var(--lu-surface-strong);
+  color: var(--lu-text-primary);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-sm);
+  padding: 0.3rem 0.5rem;
   font-family: "IM Fell English", serif;
   font-size: 0.85rem;
   cursor: pointer;
   outline: none;
   min-width: 0;
-  /* truncate long device names */
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  /* Ensure dark-mode native option list is readable */
+  color-scheme: dark;
 }
 
 .select:focus {
-  border-color: #7a6040;
+  border-color: var(--lu-accent);
 }
 
-/* ── Level meter ─────────────────────────────────────── */
+.select option {
+  background: #1e1e2c;
+  color: var(--lu-text-primary);
+}
+
+/* ── Level meter ─────────────────────────────────── */
 
 .meter {
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: 28px;
+  height: 26px;
   padding: 2px 0;
 }
 
 .bar {
   flex: 1;
   border-radius: 2px 2px 0 0;
-  background: #1e1a14;
-  /* Variable heights give an organ-pipe silhouette */
-  transition: background 0.04s, box-shadow 0.04s;
+  background: rgba(80, 80, 110, 0.30);
+  transition: background 0.05s, box-shadow 0.05s;
 }
 
-/* Stagger heights to look like organ pipes */
+/* Stagger heights for an organ-pipe silhouette */
 .bar:nth-child(1)  { height: 45%; }
 .bar:nth-child(2)  { height: 55%; }
 .bar:nth-child(3)  { height: 70%; }
@@ -85,17 +86,18 @@
 .bar:nth-child(15) { height: 60%; }
 .bar:nth-child(16) { height: 48%; }
 
-.meter.meterActive .bar {
-  background: #2a2218;
+/* Lit bars shift from lunar blue to rose as volume rises */
+.barLit {
+  background: var(--lu-accent-light);
 }
 
-/* ── Status hints ────────────────────────────────────── */
+/* ── Hints ────────────────────────────────────────── */
 
 .hint {
   font-family: "IM Fell English", serif;
   font-style: italic;
   font-size: 0.78rem;
-  color: #5a4a30;
+  color: var(--lu-text-muted);
   margin: 0;
 }
 
@@ -103,6 +105,6 @@
   font-family: "IM Fell English", serif;
   font-style: italic;
   font-size: 0.82rem;
-  color: #c05040;
+  color: var(--lu-error);
   margin: 0;
 }

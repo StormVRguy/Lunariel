@@ -6,13 +6,21 @@ const BAR_COUNT = 16;
 
 interface Props {
   mic: UseMicMonitor;
-  active: boolean; // true = currently recording for speech recognition
+  active: boolean;
 }
 
 export function MicMonitor({ mic, active }: Props) {
-  const { devices, selectedDeviceId, selectDevice, volume, isMonitoring, startMonitoring, stopMonitoring, error } = mic;
+  const {
+    devices,
+    selectedDeviceId,
+    selectDevice,
+    volume,
+    isMonitoring,
+    startMonitoring,
+    stopMonitoring,
+    error,
+  } = mic;
 
-  // Auto-start monitoring on mount; stop when hidden
   useEffect(() => {
     void startMonitoring();
     return () => stopMonitoring();
@@ -25,7 +33,7 @@ export function MicMonitor({ mic, active }: Props) {
     <div className={styles.wrapper}>
       <div className={styles.row}>
         <label className={styles.label} htmlFor="mic-select">
-          🎙 Microphone
+          Voice
         </label>
         <select
           id="mic-select"
@@ -46,20 +54,24 @@ export function MicMonitor({ mic, active }: Props) {
       </div>
 
       <div
-        className={`${styles.meter} ${active ? styles.meterActive : ""}`}
+        className={styles.meter}
         aria-label={`Input level: ${Math.round(volume * 100)}%`}
+        aria-hidden={!active}
       >
         {Array.from({ length: BAR_COUNT }, (_, i) => {
           const lit = i < activeBarCount;
-          // Colour shifts from amber → orange → red at the high end
-          const hue = 45 - i * 2.2;
+          // Shift from lunar blue toward rose as volume rises
+          const hue = 220 - i * 4;
           return (
             <div
               key={i}
               className={`${styles.bar} ${lit ? styles.barLit : ""}`}
               style={
                 lit
-                  ? { background: `hsl(${hue}, 90%, 55%)`, boxShadow: `0 0 6px hsl(${hue}, 90%, 40%)` }
+                  ? {
+                      background: `hsl(${hue}, 50%, 62%)`,
+                      boxShadow: `0 0 5px hsl(${hue}, 50%, 70%)`,
+                    }
                   : undefined
               }
             />
@@ -68,7 +80,7 @@ export function MicMonitor({ mic, active }: Props) {
       </div>
 
       {!isMonitoring && !error && (
-        <p className={styles.hint}>Starting microphone…</p>
+        <p className={styles.hint}>Opening the chamber…</p>
       )}
       {error && <p className={styles.micError}>{error}</p>}
     </div>

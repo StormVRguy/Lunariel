@@ -1,0 +1,66 @@
+/**
+ * Lunariel design tokens — eigengrau, luminous blue-white glass.
+ *
+ * Eigengrau (#16161d) is the colour the visual field produces in total darkness.
+ * Against it, Lunariel's light-lines and pearl panels appear as visions —
+ * luminous, calm, slightly unearthly.
+ *
+ * Primary correspondences:
+ *   Colour: Pearl white (luminous against dark)
+ *   Material: Glass (translucent dark panels)
+ *   Motif: Circle (halo, rings, buttons)
+ *   Time: Dawn (the first light in eigengrau)
+ */
+
+:root {
+  /* ── Background ───────────────────────────────────── */
+  --lu-bg:             #16161d;   /* eigengrau */
+
+  /* ── Dark glass surfaces ──────────────────────────── */
+  --lu-surface:        rgba(26, 26, 36, 0.72);
+  --lu-surface-strong: rgba(30, 30, 44, 0.90);
+  --lu-border:         rgba(100, 112, 160, 0.22);
+  --lu-border-strong:  rgba(120, 132, 180, 0.40);
+
+  /* ── Luminous typography ──────────────────────────── */
+  --lu-text-primary:   #e4e2f2;
+  --lu-text-secondary: #8888b0;
+  --lu-text-muted:     #50507a;
+  --lu-text-latin:     #ccc8e8;   /* soft blue-white for prayer text */
+
+  /* ── Lunar accent (blue) ──────────────────────────── */
+  --lu-accent:         #7a90c8;
+  --lu-accent-light:   #a4bae0;
+  --lu-accent-dim:     rgba(122, 144, 200, 0.14);
+
+  /* ── Halo glow ────────────────────────────────────── */
+  --lu-halo:           rgba(160, 180, 240, 0.25);
+  --lu-halo-strong:    rgba(140, 166, 228, 0.50);
+
+  /* ── Vigil / singing ──────────────────────────────── */
+  --lu-vigil:          rgba(120, 148, 210, 0.18);
+  --lu-vigil-glow:     0 0 32px rgba(100, 130, 210, 0.32);
+
+  /* ── Discernment ──────────────────────────────────── */
+  --lu-discern:        rgba(120, 90, 160, 0.15);
+  --lu-discern-border: rgba(140, 110, 180, 0.38);
+  --lu-discern-text:   #c8a8ee;
+
+  /* ── Error / interrupted ──────────────────────────── */
+  --lu-error:          #d06878;
+  --lu-error-bg:       rgba(180, 60, 80, 0.12);
+
+  /* ── Recording ────────────────────────────────────── */
+  --lu-rec:            #e05848;
+  --lu-rec-glow:       rgba(220, 88, 72, 0.35);
+
+  /* ── Geometry ─────────────────────────────────────── */
+  --lu-radius-sm:      6px;
+  --lu-radius-md:      12px;
+  --lu-radius-lg:      24px;
+  --lu-radius-full:    9999px;
+
+  /* ── Blur / glass ─────────────────────────────────── */
+  --lu-blur:           blur(12px);
+  --lu-blur-light:     blur(6px);
+}

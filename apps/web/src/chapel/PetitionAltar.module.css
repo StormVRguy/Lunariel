@@ -1,0 +1,71 @@
+.wrapper {
+  width: 100%;
+  background: var(--lu-surface);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-md);
+  padding: 1rem 1.2rem;
+  backdrop-filter: var(--lu-blur);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.altarLabel {
+  font-family: "Cinzel", serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lu-text-muted);
+  margin: 0;
+}
+
+/* ── Mic monitor (reused component) ─────────────────── */
+
+/* Overrides for the dark MicMonitor inside the light chapel */
+.wrapper :global(.micWrapper) {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* ── Offer Petition button ────────────────────────── */
+
+.offerBtn {
+  font-family: "Cinzel", serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.8rem 1.4rem;
+  border: 1.5px solid var(--lu-border-strong);
+  border-radius: var(--lu-radius-full);
+  background: var(--lu-surface-strong);
+  color: var(--lu-text-primary);
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.25s;
+  backdrop-filter: var(--lu-blur-light);
+}
+
+.offerBtn:not(:disabled):hover {
+  background: rgba(50, 55, 80, 0.88);
+  border-color: var(--lu-accent);
+}
+
+.offerBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.offerBtnReceiving {
+  border-color: var(--lu-rec);
+  color: var(--lu-rec);
+  background: rgba(176, 72, 64, 0.06);
+  box-shadow: 0 0 16px var(--lu-rec-glow);
+  animation: recPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes recPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--lu-rec-glow); }
+  50%       { box-shadow: 0 0 24px var(--lu-rec-glow); }
+}

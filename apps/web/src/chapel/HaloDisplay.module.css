@@ -1,0 +1,93 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ── Halo ring ─────────────────────────────────── */
+
+.halo {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--lu-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.haloActive {
+  border-color: var(--lu-accent-light);
+  box-shadow: 0 0 18px var(--lu-halo), 0 0 36px var(--lu-halo);
+  animation: haloBreath 2.2s ease-in-out infinite;
+}
+
+.haloVigil {
+  border-color: var(--lu-accent);
+  box-shadow: 0 0 24px var(--lu-halo-strong), 0 0 50px var(--lu-halo);
+  animation: haloBreath 1.6s ease-in-out infinite;
+}
+
+.haloInterrupted {
+  border-color: var(--lu-error);
+  box-shadow: 0 0 14px var(--lu-error-bg);
+}
+
+/* Spinning arc for composing / discerning */
+.spinner {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--lu-accent);
+  animation: spin 1.1s linear infinite;
+}
+
+.symbol {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--lu-text-secondary);
+  user-select: none;
+}
+
+.haloActive .symbol,
+.haloVigil .symbol {
+  color: var(--lu-accent);
+}
+
+/* ── State labels ───────────────────────────────── */
+
+.stateLabel {
+  font-family: "Cinzel", serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lu-text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+.stateInstruction {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--lu-text-muted);
+  margin: 0;
+  text-align: center;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* ── Keyframes ──────────────────────────────────── */
+
+@keyframes haloBreath {
+  0%, 100% { box-shadow: 0 0 16px var(--lu-halo); }
+  50%       { box-shadow: 0 0 32px var(--lu-halo-strong), 0 0 60px var(--lu-halo); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

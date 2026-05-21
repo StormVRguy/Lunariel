@@ -1,0 +1,194 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--lu-surface);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-md);
+  padding: 1.1rem 1rem 1rem;
+  backdrop-filter: var(--lu-blur);
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.wrapperLive {
+  border-color: var(--lu-accent-light);
+  box-shadow: var(--lu-vigil-glow);
+}
+
+.caption {
+  font-family: "Cinzel", serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lu-text-muted);
+  margin: 0 0 0.75rem;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.wrapperLive .caption {
+  color: var(--lu-accent);
+  animation: captionPulse 1.4s ease-in-out infinite;
+}
+
+.refrainBadge {
+  display: inline-block;
+  font-family: "Cinzel", serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lu-accent);
+  background: var(--lu-accent-dim);
+  border: 1px solid var(--lu-accent-light);
+  border-radius: var(--lu-radius-full);
+  padding: 0.15em 0.6em;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  opacity: 0.85;
+}
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.35rem 0.25rem;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--lu-border) transparent;
+}
+
+.wordGroup {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+.wordGap {
+  color: var(--lu-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  margin: 0 0.15rem 0.2rem;
+  user-select: none;
+  opacity: 0.4;
+}
+
+/* ── Syllable chip ─────────────────────────────── */
+
+.syllable {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 2rem;
+  padding: 0.3rem 0.5rem 0.25rem;
+  border-radius: var(--lu-radius-sm);
+  background: var(--lu-surface-strong);
+  border: 1px solid var(--lu-border);
+  transition:
+    transform 0.15s ease,
+    opacity 0.25s ease,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.syllableIdle {
+  opacity: 0.75;
+}
+
+.syllablePast {
+  opacity: 0.3;
+  transform: scale(0.92);
+}
+
+.syllableActive {
+  z-index: 2;
+  transform: scale(1.18) translateY(-4px);
+  border-color: var(--lu-accent);
+  background: rgba(168, 188, 216, 0.25);
+  box-shadow:
+    0 0 18px var(--lu-halo),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: syllablePulse 0.6s ease-in-out infinite;
+}
+
+.syllableGlow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 10px;
+  background: radial-gradient(ellipse at center, var(--lu-halo) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.syllableActive .syllableGlow {
+  opacity: 1;
+  animation: glowBreath 0.6s ease-in-out infinite;
+}
+
+.syllableText {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--lu-text-latin);
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.syllableActive .syllableText {
+  color: var(--lu-accent);
+}
+
+/* Letter tones shown beneath the active syllable */
+.letters {
+  display: flex;
+  gap: 0.15rem;
+  margin-top: 0.3rem;
+  padding-top: 0.2rem;
+  border-top: 1px solid var(--lu-border);
+}
+
+.letter {
+  font-family: "Cinzel", serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--lu-accent);
+  animation: letterPop 0.4s ease-out backwards;
+}
+
+.meta {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: 0.72rem;
+  color: var(--lu-text-muted);
+  text-align: center;
+  margin: 0.75rem 0 0;
+}
+
+/* ── Keyframes ─────────────────────────────────── */
+
+@keyframes syllablePulse {
+  0%, 100% { box-shadow: 0 0 14px var(--lu-halo), 0 3px 8px rgba(0,0,0,0.06); }
+  50%       { box-shadow: 0 0 26px var(--lu-halo-strong), 0 5px 14px rgba(0,0,0,0.1); }
+}
+
+@keyframes glowBreath {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes letterPop {
+  from { opacity: 0; transform: translateY(5px) scale(0.6); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes captionPulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; }
+}
