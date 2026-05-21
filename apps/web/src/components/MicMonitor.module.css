@@ -1,0 +1,108 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: #0c0a08;
+  border: 1px solid #2e2618;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+}
+
+/* ── Device selector row ─────────────────────────────── */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.label {
+  font-family: "Cinzel", serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6a5840;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.select {
+  flex: 1;
+  background: #14100c;
+  color: #c8b090;
+  border: 1px solid #3a3020;
+  border-radius: 3px;
+  padding: 0.35rem 0.5rem;
+  font-family: "IM Fell English", serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 0;
+  /* truncate long device names */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.select:focus {
+  border-color: #7a6040;
+}
+
+/* ── Level meter ─────────────────────────────────────── */
+
+.meter {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 28px;
+  padding: 2px 0;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  background: #1e1a14;
+  /* Variable heights give an organ-pipe silhouette */
+  transition: background 0.04s, box-shadow 0.04s;
+}
+
+/* Stagger heights to look like organ pipes */
+.bar:nth-child(1)  { height: 45%; }
+.bar:nth-child(2)  { height: 55%; }
+.bar:nth-child(3)  { height: 70%; }
+.bar:nth-child(4)  { height: 85%; }
+.bar:nth-child(5)  { height: 100%; }
+.bar:nth-child(6)  { height: 90%; }
+.bar:nth-child(7)  { height: 80%; }
+.bar:nth-child(8)  { height: 95%; }
+.bar:nth-child(9)  { height: 100%; }
+.bar:nth-child(10) { height: 88%; }
+.bar:nth-child(11) { height: 75%; }
+.bar:nth-child(12) { height: 85%; }
+.bar:nth-child(13) { height: 92%; }
+.bar:nth-child(14) { height: 78%; }
+.bar:nth-child(15) { height: 60%; }
+.bar:nth-child(16) { height: 48%; }
+
+.meter.meterActive .bar {
+  background: #2a2218;
+}
+
+/* ── Status hints ────────────────────────────────────── */
+
+.hint {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: #5a4a30;
+  margin: 0;
+}
+
+.micError {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: #c05040;
+  margin: 0;
+}

@@ -1,0 +1,205 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 1.5rem 4rem;
+  max-width: 680px;
+  margin: 0 auto;
+  min-height: 100dvh;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cross {
+  font-size: 2.4rem;
+  color: #c8a96e;
+  line-height: 1;
+}
+
+.title {
+  font-family: "Cinzel", serif;
+  font-size: clamp(1.2rem, 4vw, 1.7rem);
+  font-weight: 600;
+  color: #e8dcc8;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+}
+
+.statusLine {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  color: #a89070;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.btn {
+  font-family: "Cinzel", serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 1rem 2rem;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s, box-shadow 0.3s;
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btnListen {
+  background: #1e1610;
+  color: #e8dcc8;
+  border-color: #7a6040;
+}
+
+.btnListen:not(:disabled):hover {
+  background: #2e2218;
+  border-color: #c8a96e;
+}
+
+.btnListen.active {
+  background: #2a1a0e;
+  border-color: #e87040;
+  color: #f0b080;
+  box-shadow: 0 0 18px #e8704066;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.btnPray {
+  background: #0e1820;
+  color: #b8d0e8;
+  border-color: #3a6080;
+}
+
+.btnPray:not(:disabled):hover {
+  background: #142030;
+  border-color: #6aa0c8;
+}
+
+.btnThankYou {
+  background: #0e1a12;
+  color: #b8d8b0;
+  border-color: #3a6040;
+}
+
+.btnThankYou:not(:disabled):hover {
+  background: #142018;
+  border-color: #6ab070;
+}
+
+/* ── Spinner ──────────────────────────────────────────── */
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #3a3020;
+  border-top-color: #c8a96e;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+/* ── Panels ──────────────────────────────────────────── */
+
+.panel {
+  width: 100%;
+  background: #100e0a;
+  border: 1px solid #3a3020;
+  border-radius: 6px;
+  padding: 1rem 1.4rem;
+  text-align: left;
+}
+
+.panelLabel {
+  font-family: "Cinzel", serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6a5840;
+  margin: 0 0 0.5rem;
+}
+
+.interimText,
+.transcriptText {
+  font-family: "IM Fell English", serif;
+  font-size: 1rem;
+  color: #a89070;
+  margin: 0;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.transcriptText {
+  color: #c8b090;
+  font-style: normal;
+}
+
+.prayerPanel {
+  border-color: #7a6040;
+  background: #0e0c08;
+}
+
+.prayerPanel.singing {
+  border-color: #6a90c8;
+  box-shadow: 0 0 24px #3a6080aa;
+  animation: glow 2.4s ease-in-out infinite;
+}
+
+.prayerText {
+  font-family: "IM Fell English", serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #e8dcc8;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Error ──────────────────────────────────────────── */
+
+.error {
+  color: #e06060;
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ── Animations ─────────────────────────────────────── */
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 12px #e8704044; }
+  50%       { box-shadow: 0 0 28px #e8704099; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 16px #3a608066; }
+  50%       { box-shadow: 0 0 36px #6aa0c8aa; }
+}
