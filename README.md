@@ -92,13 +92,35 @@ VITE_API_URL=                # optional, override API origin (default: same-orig
 
 ## Netlify deployment
 
-1. Connect the repo to Netlify.
-2. Build settings are in [`netlify.toml`](netlify.toml) (publish `apps/web/dist`, build via workspace).
-3. Set environment variables in Netlify:
-   - `GEMINI_API_KEY` (server-side, for the intercession function)
-   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (build-time, for the web app)
-   - `ALLOWED_ORIGIN` = your Netlify site URL (e.g. `https://lunariel.netlify.app`)
-4. Deploy. The SPA is served from `apps/web/dist`; `POST /api/intercession` is handled by a Netlify Function.
+Your GitHub remote is **`StormVRguy/Lunariel`** — look for that name in Netlify, not `Angel_Incubator`.
+
+### Connect GitHub to Netlify
+
+Netlify does not scan GitHub by itself. You must link the repo once:
+
+1. Open [Netlify](https://app.netlify.com) → **Add new site** → **Import an existing project** → **GitHub**.
+2. If GitHub asks to authorize, approve **Netlify** and choose the account that owns `StormVRguy/Lunariel`.
+3. If the repo is missing: GitHub → **Settings** → **Applications** → **Netlify** → **Configure** → under *Repository access*, add **`Lunariel`** (or grant access to all repos).
+4. Select **`StormVRguy/Lunariel`**, branch **`main`**. Netlify should read [`netlify.toml`](netlify.toml) automatically (no manual publish path needed).
+5. Add environment variables (below), then deploy.
+
+### Environment variables (Netlify UI → Site configuration → Environment variables)
+
+| Variable | Scopes |
+|----------|--------|
+| `GEMINI_API_KEY` | Functions |
+| `VITE_SUPABASE_URL` | Build |
+| `VITE_SUPABASE_ANON_KEY` | Build |
+| `ALLOWED_ORIGIN` | Functions (your site URL, e.g. `https://your-site.netlify.app`) |
+
+### If the repo still does not appear
+
+- Confirm the latest code is on GitHub: `git push origin main`
+- Private repo: Netlify must have access via the GitHub app (step 3 above).
+- Org-owned repo: an org admin may need to approve the Netlify app.
+- **Manual link:** install [Netlify CLI](https://docs.netlify.com/cli/get-started/), run `netlify login`, then in the repo root: `netlify init` and follow prompts to create/link a site.
+
+Build settings (once linked) are in [`netlify.toml`](netlify.toml): publish `apps/web/dist`, build `npm ci && npm run build --workspace=apps/web`, Functions in `netlify/functions`.
 
 **Note:** Gemini + audio petitions may exceed the default 10s function timeout on Netlify’s free tier. `netlify.toml` sets a 26s timeout on the intercession function (requires Netlify Pro for timeouts above 10s).
 
