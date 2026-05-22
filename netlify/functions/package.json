@@ -1,0 +1,9 @@
+{
+  "name": "netlify-functions",
+  "private": true,
+  "dependencies": {
+    "@netlify/functions": "^3.1.10",
+    "intercession-handler": "*",
+    "lunariel-core": "*"
+  }
+}

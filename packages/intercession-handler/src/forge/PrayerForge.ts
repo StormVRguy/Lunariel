@@ -1,8 +1,5 @@
 /**
  * Prayer Forge — the Gemini client for composing Latin prayers.
- *
- * The forge receives a purified petition and weaves a structured Latin prayer.
- * It is always spoken in Lunariel's voice.
  */
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
@@ -36,13 +33,10 @@ function getForgeModel() {
   });
 }
 
-/** Strip markdown fences and extract the first JSON object from a response. */
 function extractJson(raw: string): string {
-  // Remove ```json ... ``` or ``` ... ``` wrappers that Gemini sometimes adds
   const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
   if (fenced) return fenced[1].trim();
 
-  // Try to extract a bare JSON object (first { ... })
   const objMatch = raw.match(/\{[\s\S]*\}/);
   if (objMatch) return objMatch[0];
 
@@ -66,7 +60,6 @@ function parseForgeResponse(raw: string): IntercessionResult {
 
   if (!prayer) throw new Error("The prayer text was empty.");
   if (!refrain) {
-    // Fallback: use the last sentence of the prayer as the refrain
     const sentences = prayer.split(/[.!?]+/).filter((s) => s.trim());
     return {
       prayer,
@@ -99,7 +92,6 @@ function checkFinishReason(result: Awaited<ReturnType<ReturnType<typeof getForge
   }
 }
 
-/** Compose a prayer from a base64-encoded audio petition. */
 export async function composePrayerFromAudio(
   base64Audio: string,
   mimeType: string
@@ -113,7 +105,6 @@ export async function composePrayerFromAudio(
   return parseForgeResponse(result.response.text());
 }
 
-/** Compose a prayer from a plain-text petition (fallback / mock mode). */
 export async function composePrayerFromText(
   transcript: string
 ): Promise<IntercessionResult> {

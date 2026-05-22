@@ -1,0 +1,10 @@
+.counter {
+  font-family: "Cinzel", serif;
+  font-size: var(--lu-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lu-text-secondary);
+  text-align: center;
+  margin: 1.25rem 0 0;
+  opacity: 0.85;
+}

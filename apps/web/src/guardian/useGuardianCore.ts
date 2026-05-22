@@ -17,6 +17,8 @@ import { primeAudio } from "../canticle/primeAudio";
 import { vigilLoop } from "../vigil/VigilLoop";
 import { inscribePrayerRecord } from "../remembrance/BookOfRemembrance";
 import { blobToBase64 } from "../hooks/useAudioRecorder";
+import { API_BASE } from "../lib/apiBase";
+import { useSupabaseSession } from "../lib/SupabaseProvider";
 
 export interface GuardianCoreState {
   vigilState: VigilState;
@@ -37,6 +39,7 @@ export interface GuardianCoreState {
 }
 
 export function useGuardianCore(): GuardianCoreState {
+  const { userId } = useSupabaseSession();
   const [vigilState, _setVigilState] = useState<VigilState>("awaitingPetition");
   const vigilStateRef = useRef<VigilState>("awaitingPetition");
 
@@ -49,6 +52,8 @@ export function useGuardianCore(): GuardianCoreState {
 
   const chamber = usePetitionChamber();
   const abortRef = useRef<AbortController | null>(null);
+  const userIdRef = useRef(userId);
+  userIdRef.current = userId;
 
   const setVigilState = useCallback((s: VigilState) => {
     vigilStateRef.current = s;
@@ -72,7 +77,7 @@ export function useGuardianCore(): GuardianCoreState {
         setVigilState("composingPrayer");
         const base64Audio = await blobToBase64(blob);
 
-        const response = await fetch("/api/intercession", {
+        const response = await fetch(`${API_BASE}/api/intercession`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ audio: base64Audio, mimeType }),
@@ -91,13 +96,15 @@ export function useGuardianCore(): GuardianCoreState {
         setDiscernmentNotice(result.discernmentNotice ?? null);
         setIsRefrainPhase(false);
 
-        // Inscribe in the Book of Remembrance
-        inscribePrayerRecord({
-          prayer: result.prayer,
-          refrain: result.refrain,
-          purifiedIntention: result.purifiedIntention,
-          discernmentNotice: result.discernmentNotice,
-        });
+        // Inscribe in the Book of Remembrance (non-blocking)
+        if (userIdRef.current) {
+          void inscribePrayerRecord(userIdRef.current, {
+            prayer: result.prayer,
+            refrain: result.refrain,
+            purifiedIntention: result.purifiedIntention,
+            discernmentNotice: result.discernmentNotice,
+          });
+        }
 
         setVigilState("readyToSing");
         console.log(`${LOG_PREFIX.guardianCore} Prayer ready. Awaiting vigil.`);

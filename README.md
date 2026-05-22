@@ -16,7 +16,8 @@ Lunariel receives your petition, discerns it, composes a Latin prayer, and sings
 4. **Begin Vigil** — the guardian sings the full prayer once (syllable-by-syllable chords), then loops the Refrain indefinitely.
 5. **Sacred Silence** / **Resume** — pause and resume the vigil without losing the prayer.
 6. **Close Vigil** — formally dismiss the guardian.
-7. **Book of Remembrance** — optionally review or delete past prayers stored in local storage.
+7. **Book of Remembrance** — review or delete past prayers stored in Supabase (per anonymous session).
+8. **Global vigil counter** — footer shows how many Lunariel instances are actively singing right now.
 
 ---
 
@@ -42,34 +43,31 @@ Lunariel receives your petition, discerns it, composes a Latin prayer, and sings
 ```
 packages/
   lunariel-core/          Shared types, correspondences, messages
+  intercession-handler/   Gemini discernment + prayer forge (API + Netlify)
 
 apps/
-  api/
-    src/
-      discernment/        DiscernmentFilter — ethical gateway
-      forge/              PrayerForge — Gemini client + prompts
-      routes/             POST /api/intercession
+  api/                    Express dev server — POST /api/intercession
+  web/                    Vite React chapel UI
 
-  web/
-    src/
-      guardian/           useGuardianCore — central orchestrator
-      petition/           usePetitionChamber — mic + recorder
-      canticle/           CanticleEngine, syllableMap, primeAudio
-      vigil/              VigilLoop — full prayer once, refrain forever
-      remembrance/        BookOfRemembrance — localStorage, max 20
-      chapel/             ChapelView and all UI components
-      hooks/              useMicMonitor, useAudioRecorder (low-level)
-      components/         MicMonitor (shared UI primitive)
-      styles/             lunariel.tokens.css (design tokens)
+netlify/
+  functions/              Production intercession endpoint
+
+supabase/
+  migrations/             prayer_records table + RLS
 ```
 
 ---
 
 ## Dev setup
 
-1. Copy `.env.example` to `.env` and set `GEMINI_API_KEY`.
-2. `npm install` at the repo root.
-3. From the repo root, run **`evoke lunariel`** (or `npm run dev`) — starts the API on `:3001` and the web app on `:5173`.
+1. Copy `.env.example` to `.env` at the repo root and set:
+   - `GEMINI_API_KEY`
+   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (from Supabase project settings)
+2. Apply the Supabase migration (`supabase/migrations/001_remembrance.sql`) via the SQL editor or `supabase db push`.
+3. Enable **Anonymous sign-in** in Supabase → Authentication → Providers.
+4. Enable **Realtime** for the project (used for the global vigil counter).
+5. `npm install` at the repo root.
+6. From the repo root, run **`evoke lunariel`** (or `npm run dev`) — starts the API on `:3001` and the web app on `:5173`.
 
    The `evoke` command is registered in `node_modules/.bin`; Cursor and VS Code terminals pick it up automatically at the workspace root. Outside those terminals, use `npx evoke lunariel` or `npm run evoke:lunariel`.
 
@@ -81,5 +79,37 @@ apps/
 
 ```
 GEMINI_API_KEY=your_key_here
-PORT=3001          # optional, defaults to 3001
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key
+
+PORT=3001                    # optional, local Express API
+CORS_ORIGIN=                 # optional, comma-separated origins for Express
+ALLOWED_ORIGIN=              # optional, Netlify Function CORS (production site URL)
+VITE_API_URL=                # optional, override API origin (default: same-origin)
 ```
+
+---
+
+## Netlify deployment
+
+1. Connect the repo to Netlify.
+2. Build settings are in [`netlify.toml`](netlify.toml) (publish `apps/web/dist`, build via workspace).
+3. Set environment variables in Netlify:
+   - `GEMINI_API_KEY` (server-side, for the intercession function)
+   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (build-time, for the web app)
+   - `ALLOWED_ORIGIN` = your Netlify site URL (e.g. `https://lunariel.netlify.app`)
+4. Deploy. The SPA is served from `apps/web/dist`; `POST /api/intercession` is handled by a Netlify Function.
+
+**Note:** Gemini + audio petitions may exceed the default 10s function timeout on Netlify’s free tier. `netlify.toml` sets a 26s timeout on the intercession function (requires Netlify Pro for timeouts above 10s).
+
+---
+
+## Book of Remembrance
+
+Prayers are stored in Supabase (`prayer_records`), scoped to an anonymous auth session per browser. Existing localStorage entries are migrated once on first sign-in. Maximum 20 records per user (enforced in app code).
+
+---
+
+## Global vigil counter
+
+Active singers are tracked via Supabase Realtime Presence on channel `lunariel:vigil`. Only tabs in **`keepingVigil`** (actively singing) are counted — paused sacred silence is excluded.

@@ -6,7 +6,7 @@
  * and returns a structured intercession result.
  */
 import { Router, Request, Response } from "express";
-import { receivePetition } from "../discernment/DiscernmentFilter.js";
+import { receivePetition } from "intercession-handler";
 import type { PetitionPayload } from "lunariel-core";
 import { LOG_PREFIX } from "lunariel-core";
 

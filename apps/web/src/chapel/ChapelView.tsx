@@ -21,6 +21,7 @@ import { PrayerChamber } from "./PrayerChamber";
 import { LunarielSpirit } from "./LunarielSpirit";
 import { SacredColumn } from "./SacredColumn";
 import { BookOfRemembrancePanel } from "./BookOfRemembrancePanel";
+import { VigilCounter } from "./VigilCounter";
 import { MicMonitor } from "../components/MicMonitor";
 import styles from "./ChapelView.module.css";
 
@@ -145,6 +146,7 @@ export function ChapelView() {
       {/* ── Footer ────────────────────────────────────────────────── */}
       <footer className={styles.footer}>
         <BookOfRemembrancePanel />
+        <VigilCounter isKeepingVigil={isVigil} />
       </footer>
 
     </main>

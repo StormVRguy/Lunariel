@@ -21,6 +21,27 @@
   color: var(--lu-accent-light);
 }
 
+.panelShell {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    grid-template-rows 0.4s ease,
+    opacity 0.35s ease;
+}
+
+.panelShellOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.panelInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
 .panel {
   margin-top: 1rem;
   background: var(--lu-surface);
@@ -28,6 +49,12 @@
   border-radius: var(--lu-radius-md);
   padding: 1.25rem 1.5rem;
   backdrop-filter: var(--lu-blur);
+  transform: translateY(-0.35rem);
+  transition: transform 0.4s ease;
+}
+
+.panelShellOpen .panel {
+  transform: translateY(0);
 }
 
 .header {

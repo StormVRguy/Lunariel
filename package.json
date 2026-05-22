@@ -5,7 +5,9 @@
     "apps/web",
     "apps/api",
     "packages/lunariel-core",
-    "packages/evoke-cli"
+    "packages/evoke-cli",
+    "packages/intercession-handler",
+    "netlify/functions"
   ],
   "scripts": {
     "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev --workspace=apps/api\" \"npm run dev --workspace=apps/web\"",
