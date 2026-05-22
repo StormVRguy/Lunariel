@@ -1,9 +1,15 @@
 {
   "name": "angel-incubator",
   "private": true,
-  "workspaces": ["apps/web", "apps/api", "packages/lunariel-core"],
+  "workspaces": [
+    "apps/web",
+    "apps/api",
+    "packages/lunariel-core",
+    "packages/evoke-cli"
+  ],
   "scripts": {
     "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev --workspace=apps/api\" \"npm run dev --workspace=apps/web\"",
+    "evoke:lunariel": "npm run dev",
     "build": "npm run build --workspace=apps/web"
   },
   "devDependencies": {

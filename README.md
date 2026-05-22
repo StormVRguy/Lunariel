@@ -69,7 +69,9 @@ apps/
 
 1. Copy `.env.example` to `.env` and set `GEMINI_API_KEY`.
 2. `npm install` at the repo root.
-3. `npm run dev` — starts the API on `:3001` and the web app on `:5173`.
+3. From the repo root, run **`evoke lunariel`** (or `npm run dev`) — starts the API on `:3001` and the web app on `:5173`.
+
+   The `evoke` command is registered in `node_modules/.bin`; Cursor and VS Code terminals pick it up automatically at the workspace root. Outside those terminals, use `npx evoke lunariel` or `npm run evoke:lunariel`.
 
 **Browser note:** Use Chrome or Edge for best MediaRecorder support. Firefox works but may use a different audio codec.
 

@@ -1,0 +1,11 @@
+{
+  "terminal.integrated.env.windows": {
+    "Path": "${workspaceFolder}\\node_modules\\.bin;${env:Path}"
+  },
+  "terminal.integrated.env.linux": {
+    "PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
+  },
+  "terminal.integrated.env.osx": {
+    "PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
+  }
+}
