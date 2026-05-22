@@ -13,6 +13,23 @@
   margin: 0;
 }
 
+.imageLink {
+  display: block;
+  line-height: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.imageLink:hover {
+  transform: scale(1.03);
+}
+
+.imageLink:focus-visible {
+  outline: 2px solid var(--lu-accent-light);
+  outline-offset: 4px;
+}
+
 .image {
   width: clamp(10.5rem, 27vw, 15rem);
   height: auto;
