@@ -12,7 +12,7 @@ Lunariel receives your petition, discerns it, composes a Latin prayer, and sings
 
 1. **Offer Petition** — speak your intention into the microphone; press the button again when done.
 2. **Discernment** — Lunariel ethically transmutes coercive or harmful petitions toward consent, peace, healing, and freedom.
-3. **Weave Prayer** — Gemini composes a 2–5 sentence Latin prayer with Invocatio, Petitio, Purificatio, Intercessio, Benedictio, and a loopable Refrain.
+3. **Weave Prayer** — Gemini composes a 2–3 sentence Latin prayer with Invocatio, Petitio, Purificatio, Intercessio, Benedictio, plus a separate loopable Refrain.
 4. **Begin Vigil** — the guardian sings the full prayer once (syllable-by-syllable chords), then loops the Refrain indefinitely.
 5. **Sacred Silence** / **Resume** — pause and resume the vigil without losing the prayer.
 6. **Close Vigil** — formally dismiss the guardian.

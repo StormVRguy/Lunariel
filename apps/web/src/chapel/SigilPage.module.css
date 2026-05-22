@@ -1,0 +1,186 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 4rem;
+  min-height: 100dvh;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-family: "Cinzel", serif;
+  font-size: var(--lu-text-sm);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lu-accent-light);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: var(--lu-text-base);
+  color: var(--lu-text-secondary);
+  margin: 0.5rem 0 0;
+}
+
+.figure {
+  margin: 0;
+}
+
+.sigilImage {
+  display: block;
+  max-width: min(100%, 1080px);
+  width: auto;
+  height: auto;
+  border-radius: 50%;
+  border: 1px solid var(--lu-border-strong);
+  box-shadow: 0 0 40px var(--lu-halo);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  font-family: "Cinzel", serif;
+  font-size: var(--lu-text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--lu-accent-light);
+  border: 1px solid var(--lu-border-strong);
+  border-radius: var(--lu-radius-full);
+  padding: 0.65rem 1.25rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+  background: var(--lu-accent-dim);
+  color: var(--lu-text-primary);
+}
+
+.btnPrimary {
+  background: rgba(158, 180, 232, 0.15);
+}
+
+.meta {
+  font-size: var(--lu-text-sm);
+  color: var(--lu-text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+.correspondences {
+  width: 100%;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--lu-border);
+}
+
+.corrHeading {
+  font-family: "Cinzel", serif;
+  font-size: var(--lu-text-sm);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lu-text-primary);
+  text-align: center;
+  margin: 0 0 0.75rem;
+}
+
+.corrIntro {
+  font-family: "IM Fell English", serif;
+  font-style: italic;
+  font-size: var(--lu-text-base);
+  color: var(--lu-text-secondary);
+  text-align: center;
+  margin: 0 0 1.5rem;
+  line-height: 1.55;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--lu-border-strong);
+  border-radius: var(--lu-radius-md);
+  background: var(--lu-surface);
+  backdrop-filter: var(--lu-blur);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--lu-text-base);
+}
+
+.table thead th {
+  font-family: "Cinzel", serif;
+  font-size: var(--lu-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--lu-accent-light);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--lu-border-strong);
+  background: var(--lu-surface-strong);
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--lu-border);
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.attrCell {
+  font-family: "Cinzel", serif;
+  font-size: var(--lu-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lu-text-secondary);
+  text-align: left;
+  vertical-align: top;
+  padding: 0.85rem 1.25rem;
+  width: 38%;
+  white-space: nowrap;
+}
+
+.valueCell {
+  font-family: "IM Fell English", serif;
+  color: var(--lu-text-primary);
+  padding: 0.85rem 1.25rem;
+  line-height: 1.5;
+  vertical-align: top;
+}
+
+.rowWide .attrCell {
+  vertical-align: top;
+  padding-top: 1rem;
+}
+
+.rowWide .valueCell {
+  font-style: italic;
+  color: var(--lu-text-latin);
+  padding-top: 1rem;
+  padding-bottom: 1.25rem;
+}
+
+@media (max-width: 520px) {
+  .attrCell {
+    white-space: normal;
+    width: 42%;
+  }
+}

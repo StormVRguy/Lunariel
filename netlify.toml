@@ -11,6 +11,11 @@
   timeout = 26
 
 [[redirects]]
+  from = "/sigil"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "/api/intercession"
   to = "/.netlify/functions/intercession"
   status = 200

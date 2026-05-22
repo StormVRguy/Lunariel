@@ -23,7 +23,7 @@ export type VigilState =
  * Contains the full prayer, the loopable refrain, and optional discernment notes.
  */
 export interface IntercessionResult {
-  /** Full Latin prayer text, 2–5 sentences. */
+  /** Full Latin prayer text, 2–3 sentences (refrain is separate). */
   prayer: string;
   /**
    * A short loopable Latin refrain extracted from the prayer.

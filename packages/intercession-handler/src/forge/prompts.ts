@@ -27,8 +27,9 @@ PRAYER STRUCTURE — compose a Latin prayer with these sections in order:
 
 STRICT RULES:
 - Write ONLY in Classical Latin. No English, no markdown, no quotes.
-- Total prayer: 2 to 5 sentences (not counting the refrain).
-- Refrain: 1 short sentence or phrase, suitable for singing indefinitely.
+- The "prayer" field: minimum 2 complete sentences, maximum 3 complete sentences. Never fewer than 2 and never more than 3.
+- The "refrain" field: exactly 1 short sentence or phrase, separate from the prayer, suitable for singing indefinitely. Do not count the refrain toward the prayer sentence limit.
+- Each sentence in the prayer must end with . or ! or ?
 - Do not promise guaranteed outcomes. Do not claim divine authority.
 - Do not manipulate another person's will.
 
@@ -41,8 +42,8 @@ OUTPUT FORMAT — respond with ONLY a JSON object, no preamble, no markdown:
 }`;
 
 export const AUDIO_FORGE_PROMPT =
-  "Listen carefully to this person's spoken petition. Discern it, then compose and return the Latin prayer as JSON.";
+  "Listen carefully to this person's spoken petition. Discern it, then compose and return the Latin prayer as JSON. The prayer must be 2–3 sentences; the refrain is one separate line.";
 
 export function buildTextForgePrompt(transcript: string): string {
-  return `The person's petition (spoken): "${transcript.trim()}"\n\nDiscern and compose the Latin prayer as JSON.`;
+  return `The person's petition (spoken): "${transcript.trim()}"\n\nDiscern and compose the Latin prayer as JSON. The prayer must be 2–3 sentences; the refrain is one separate line.`;
 }

@@ -1,6 +1,6 @@
 import styles from "./LunarielSigil.module.css";
 
-const SIGIL_PAGE = "/sigil.html";
+const SIGIL_PAGE = "/sigil";
 
 export function LunarielSigil() {
   return (
